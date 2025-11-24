@@ -407,5 +407,5 @@ app.get('/api/dashboard', (req, res) => {
 });
 
 app.listen(port, '0.0.0.0', () => {
-  console.log(`Backend running on port ${port}`);
+  console.log(`>>> KODINGAN BARU SUDAH MASUK! Server listen on ${port}`);
 });
