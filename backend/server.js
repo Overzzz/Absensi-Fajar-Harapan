@@ -1,38 +1,44 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-const bcrypt = require('bcrypt'); 
-const jwt = require('jsonwebtoken'); 
-const multer = require('multer'); 
-const path = require('path');     
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
+require('dotenv').config(); 
 
 const app = express();
-const port = 5000;
-const saltRounds = 10; 
-const JWT_SECRET = 'secret_key_rahasia_anda'; 
+const port = process.env.PORT || 10000;
+const saltRounds = 10;
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Multer config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => { cb(null, 'uploads/'); },
   filename: (req, file, cb) => { cb(null, Date.now() + '-' + file.originalname); }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
+// CONNECT MYSQL CLEVER CLOUD
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'absensi_fajar'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
 
 db.connect(err => {
   if (err) console.error('Error DB:', err);
-  else console.log('Connected to DB');
+  else console.log('Connected to remote DB');
 });
+
 
 // --- API SISWA ---
 app.get('/api/siswa', (req, res) => {
@@ -401,5 +407,5 @@ app.get('/api/dashboard', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Backend server running on http://localhost:${port}`);
+  console.log(`Backend running on port ${port}`);
 });
