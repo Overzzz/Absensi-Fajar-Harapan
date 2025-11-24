@@ -8,7 +8,7 @@ const path = require('path');
 require('dotenv').config(); 
 
 const app = express();
-const port = process.env.PORT || 10000;
+const port = process.env.RAILWAY_PORT || process.env.PORT || 10000;
 const saltRounds = 10;
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -406,6 +406,6 @@ app.get('/api/dashboard', (req, res) => {
   });
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Backend running on port ${port}`);
 });
