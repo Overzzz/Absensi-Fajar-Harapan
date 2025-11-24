@@ -1,0 +1,409 @@
+/* --- 1. VARIABEL GLOBAL & RESET --- */
+:root {
+  --primary-color: #4361ee;       /* Biru Utama Modern */
+  --primary-dark: #3a0ca3;        /* Biru Gelap */
+  --secondary-color: #7209b7;     /* Ungu Modern */
+  --accent-color: #f72585;        /* Pink Aksen */
+  --success-color: #10b981;       /* Hijau Sukses */
+  --danger-color: #ef476f;        /* Merah Error/Logout */
+  --warning-color: #f59e0b;       /* Kuning Peringatan */
+  --dark-bg: #0f172a;             /* Warna Sidebar Gelap */
+  --light-bg: #f8fafc;            /* Background Halaman */
+  --card-bg: #ffffff;             /* Background Kartu/Konten */
+  --text-color: #334155;          /* Warna Teks Utama */
+  --border-color: #e2e8f0;        /* Warna Border Halus */
+  --font-main: 'Inter', sans-serif;
+  --font-header: 'Poppins', sans-serif;
+  --sidebar-width: 260px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background-color: var(--light-bg);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-header);
+  margin-top: 0;
+  font-weight: 600;
+}
+
+/* --- 2. LAYOUT DASHBOARD (FLEXBOX) --- */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* --- 3. SIDEBAR (MENU KIRI) --- */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--dark-bg);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
+.sidebar-header {
+  padding: 25px 20px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  text-align: center;
+  font-family: var(--font-header);
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.sidebar-menu {
+  flex: 1;
+  padding: 20px 15px;
+  overflow-y: auto;
+}
+
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  color: #94a3b8;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.sidebar-menu a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(5px);
+}
+
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0,0,0,0.2);
+}
+
+.btn-logout {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--danger-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-main);
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px rgba(239, 71, 111, 0.3);
+}
+
+.btn-logout:hover {
+  background-color: #d90429;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(239, 71, 111, 0.4);
+}
+
+/* --- 4. MAIN CONTENT (KANAN) --- */
+.main-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  background-color: var(--light-bg);
+}
+
+.content-wrapper {
+  background-color: var(--card-bg);
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+  min-height: 85vh;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 5. HALAMAN LOGIN (PREMIUM STYLE) --- */
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  padding: 20px;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 45px;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.login-header { margin-bottom: 30px; }
+.login-header h2 {
+  color: var(--primary-dark);
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.login-header p { color: #64748b; font-size: 14px; margin: 0; }
+
+.form-group { margin-bottom: 20px; text-align: left; }
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.3s;
+  background-color: #f8fafc;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  background-color: white;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+}
+
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+}
+
+.btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+}
+
+.auth-toggle {
+  margin-top: 25px;
+  font-size: 14px;
+  color: #64748b;
+}
+.auth-toggle span {
+  color: var(--primary-color);
+  font-weight: 700;
+  cursor: pointer;
+}
+.auth-toggle span:hover { text-decoration: underline; }
+
+.alert-box {
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.alert-error { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+.alert-success { background-color: #d1fae5; color: #047857; border: 1px solid #a7f3d0; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 6. KOMPONEN UI (Form & Tabel) --- */
+
+input, select {
+  padding: 10px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-size: 14px;
+  background-color: white;
+}
+
+input:focus, select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+button {
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  font-family: var(--font-main);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+button:active { transform: scale(0.98); }
+
+/* Tabel Modern */
+table {
+  width: 100%;
+  border-collapse: collapse; 
+  margin-top: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px; 
+  overflow: hidden; 
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+th {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  padding: 16px;
+  text-align: center; 
+  border: 1px solid var(--border-color); 
+}
+
+td {
+  padding: 16px;
+  border: 1px solid var(--border-color); 
+  color: var(--text-color);
+  background-color: white;
+  font-size: 0.95rem;
+  text-align: center; 
+}
+
+tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* --- 7. DASHBOARD (KARTU STATISTIK) --- */
+.dashboard-title {
+  font-size: 26px;
+  margin-bottom: 25px;
+  color: #1e293b;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 15px;
+  display: inline-block;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  text-align: left;
+  border: 1px solid var(--border-color);
+  border-left: 6px solid transparent; 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h3 {
+  font-size: 42px;
+  margin: 0;
+  font-weight: 800;
+  color: var(--text-color);
+}
+
+.stat-card p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card-blue { border-left-color: var(--primary-color); }
+.card-blue h3 { color: var(--primary-color); }
+
+.card-green { border-left-color: var(--success-color); }
+.card-green h3 { color: var(--success-color); }
+
+.card-orange { border-left-color: var(--warning-color); }
+.card-orange h3 { color: var(--warning-color); }
+
+
+/* --- 8. PRINT STYLE (KHUSUS CETAK PDF) --- */
+@media print {
+  .sidebar, 
+  .btn-logout, 
+  .sidebar-header, 
+  nav, 
+  form, 
+  button, 
+  .no-print, 
+  .App-header {
+    display: none !important;
+  }
+
+  .dashboard-container { display: block !important; height: auto !important; }
+  .main-content { padding: 0 !important; margin: 0 !important; overflow: visible !important; background-color: white !important; }
+  .content-wrapper { box-shadow: none !important; padding: 0 !important; margin: 0 !important; border: none !important; min-height: auto !important; }
+  
+  body { background-color: white !important; color: black !important; }
+  
+  .area-cetak { display: block !important; width: 100% !important; }
+  
+  table { 
+    width: 100% !important; 
+    border-collapse: collapse !important; 
+    border: 1px solid black !important; 
+    page-break-inside: auto; 
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+  
+  tr { page-break-inside: avoid; page-break-after: auto; }
+
+  th, td { 
+    border: 1px solid black !important; 
+    padding: 6px !important; 
+    font-size: 10pt !important; 
+    color: black !important;
+  }
+  
+  h3 { text-align: center !important; font-size: 16pt !important; margin-bottom: 5px !important; color: black !important; }
+  p { text-align: center !important; font-size: 11pt !important; margin-bottom: 15px !important; color: black !important; }
+
+  a { text-decoration: none !important; color: black !important; }
+}
