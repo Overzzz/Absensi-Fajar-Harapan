@@ -16,7 +16,7 @@ function SiswaEdit({ token }) {
     // 1. Ambil data siswa yang mau diedit
     const fetchSiswaById = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/siswa/${id}`, {
+        const response = await axios.get(`https://absensi-fajar-harapan-production.up.railway.app/api/siswa/${id}`, {
            headers: { Authorization: `Bearer ${token}` }
         });
         const siswa = response.data;
@@ -32,7 +32,7 @@ function SiswaEdit({ token }) {
     // 2. [BARU] Ambil daftar kelas untuk dropdown
     const fetchKelas = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/kelas', {
+        const response = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/kelas', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setKelasList(response.data);
@@ -58,7 +58,7 @@ function SiswaEdit({ token }) {
     };
 
     try {
-      const response = await axios.put(`http://localhost:5000/api/siswa/${id}`, dataSiswaUpdate, {
+      const response = await axios.put(`https://absensi-fajar-harapan-production.up.railway.app/api/siswa/${id}`, dataSiswaUpdate, {
          headers: { Authorization: `Bearer ${token}` }
       });
       

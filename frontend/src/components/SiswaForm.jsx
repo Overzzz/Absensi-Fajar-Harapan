@@ -12,7 +12,7 @@ function SiswaForm({ onSiswaAdded, token }) {
   useEffect(() => {
     const fetchKelas = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/kelas', {
+        const response = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/kelas', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setKelasList(response.data);
@@ -34,7 +34,7 @@ function SiswaForm({ onSiswaAdded, token }) {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/siswa', dataSiswaBaru, {
+      const response = await axios.post('https://absensi-fajar-harapan-production.up.railway.app/api/siswa', dataSiswaBaru, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

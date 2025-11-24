@@ -47,15 +47,15 @@ function JadwalManager({ token }) {
   useEffect(() => {
     if(token) {
       refreshData();
-      axios.get('http://localhost:5000/api/guru', { headers: { Authorization: `Bearer ${token}` }})
+      axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/guru', { headers: { Authorization: `Bearer ${token}` }})
         .then(res => setGurus(res.data));
-      axios.get('http://localhost:5000/api/kelas', { headers: { Authorization: `Bearer ${token}` }})
+      axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/kelas', { headers: { Authorization: `Bearer ${token}` }})
         .then(res => setKelas(res.data));
     }
   }, [token]);
 
   const refreshData = () => {
-    axios.get('http://localhost:5000/api/jadwal', { headers: { Authorization: `Bearer ${token}` }})
+    axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/jadwal', { headers: { Authorization: `Bearer ${token}` }})
       .then(res => setJadwalList(res.data))
       .catch(err => console.error(err));
   };
@@ -64,7 +64,7 @@ function JadwalManager({ token }) {
     e.preventDefault();
     setMessage('');
     try {
-      await axios.post('http://localhost:5000/api/jadwal', formData, {
+      await axios.post('https://absensi-fajar-harapan-production.up.railway.app/api/jadwal', formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessage('Jadwal berhasil ditambahkan!');
@@ -77,7 +77,7 @@ function JadwalManager({ token }) {
   const handleDelete = async (id) => {
     if(window.confirm('Hapus jadwal ini?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/jadwal/${id}`, { headers: { Authorization: `Bearer ${token}` }});
+        await axios.delete(`https://absensi-fajar-harapan-production.up.railway.app/api/jadwal/${id}`, { headers: { Authorization: `Bearer ${token}` }});
         refreshData();
       } catch (err) { alert('Gagal hapus'); }
     }

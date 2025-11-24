@@ -15,7 +15,7 @@ function GuruEdit({ token }) {
   useEffect(() => {
     const fetchGuruById = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/guru/${id}`, {
+        const response = await axios.get(`https://absensi-fajar-harapan-production.up.railway.app/api/guru/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const guru = response.data;
@@ -46,7 +46,7 @@ function GuruEdit({ token }) {
     };
 
     try {
-      const response = await axios.put(`http://localhost:5000/api/guru/${id}`, dataGuruUpdate, {
+      const response = await axios.put(`https://absensi-fajar-harapan-production.up.railway.app/api/guru/${id}`, dataGuruUpdate, {
          headers: { Authorization: `Bearer ${token}` }
       });
       

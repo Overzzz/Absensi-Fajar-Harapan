@@ -24,7 +24,7 @@ function GuruForm({ onGuruAdded, token }) {
     const dataGuruBaru = { nama, nip, mapel, tgl_lahir: tglLahir };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/guru', dataGuruBaru, {
+      const response = await axios.post('https://absensi-fajar-harapan-production.up.railway.app/api/guru', dataGuruBaru, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

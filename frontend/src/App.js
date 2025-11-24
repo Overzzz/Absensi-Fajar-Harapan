@@ -44,7 +44,7 @@ function App() {
     if (!token) { setSiswaLoading(false); return; }
     try {
       setSiswaLoading(true);
-      const response = await axios.get('http://localhost:5000/api/siswa', {headers: { Authorization: `Bearer ${token}` }});
+      const response = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/siswa', {headers: { Authorization: `Bearer ${token}` }});
       setSiswaList(response.data);
       setSiswaError(null);
     } catch (err) {
@@ -55,7 +55,7 @@ function App() {
   const handleSiswaAdded = () => { fetchSiswa(); };
   const handleSiswaDelete = async (idSiswa) => {
     if (window.confirm('Hapus siswa ini?')) {
-      try { await axios.delete(`http://localhost:5000/api/siswa/${idSiswa}`, {headers: { Authorization: `Bearer ${token}` }}); fetchSiswa(); 
+      try { await axios.delete(`https://absensi-fajar-harapan-production.up.railway.app/api/siswa/${idSiswa}`, {headers: { Authorization: `Bearer ${token}` }}); fetchSiswa(); 
       } catch (err) { alert('Gagal menghapus siswa.'); }
     }
   };
@@ -65,7 +65,7 @@ function App() {
     if (!token) { setGuruLoading(false); return; }
     try {
       setGuruLoading(true);
-      const response = await axios.get('http://localhost:5000/api/guru', {headers: { Authorization: `Bearer ${token}` }});
+      const response = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/guru', {headers: { Authorization: `Bearer ${token}` }});
       setGuruList(response.data);
       setGuruError(null);
     } catch (err) {
@@ -76,7 +76,7 @@ function App() {
   const handleGuruAdded = () => { fetchGuru(); };
   const handleGuruDelete = async (idGuru) => {
     if (window.confirm('Hapus guru ini?')) {
-      try { await axios.delete(`http://localhost:5000/api/guru/${idGuru}`, {headers: { Authorization: `Bearer ${token}` }}); fetchGuru();
+      try { await axios.delete(`https://absensi-fajar-harapan-production.up.railway.app/api/guru/${idGuru}`, {headers: { Authorization: `Bearer ${token}` }}); fetchGuru();
       } catch (err) { alert('Gagal menghapus guru.'); }
     }
   };

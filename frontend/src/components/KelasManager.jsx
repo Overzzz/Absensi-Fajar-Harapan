@@ -12,7 +12,7 @@ function KelasManager({ token }) {
   const fetchKelas = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/kelas', {
+      const response = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/kelas', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setKelasList(response.data);
@@ -35,7 +35,7 @@ function KelasManager({ token }) {
     setError('');
 
     try {
-      await axios.post('http://localhost:5000/api/kelas', 
+      await axios.post('https://absensi-fajar-harapan-production.up.railway.app/api/kelas', 
         { nama_kelas: namaKelas }, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -52,7 +52,7 @@ function KelasManager({ token }) {
     if (!window.confirm("Yakin hapus kelas ini?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/kelas/${id}`, {
+      await axios.delete(`https://absensi-fajar-harapan-production.up.railway.app/api/kelas/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchKelas();

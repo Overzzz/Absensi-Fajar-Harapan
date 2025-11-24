@@ -23,7 +23,7 @@ function RekapPage({ token }) {
   useEffect(() => {
     const fetchKelas = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/kelas', {
+        const res = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/kelas', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setKelasList(res.data);
@@ -42,7 +42,7 @@ function RekapPage({ token }) {
       // [BARU] Ambil guruId dari localStorage untuk filter otomatis
       const guruId = localStorage.getItem('guruId');
 
-      const response = await axios.get('http://localhost:5000/api/absensi', {
+      const response = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/absensi', {
         headers: { Authorization: `Bearer ${token}` },
         params: { 
             tanggal: tanggalFilter,
@@ -189,7 +189,7 @@ function RekapPage({ token }) {
                       <td style={{ textAlign: 'center' }}>
                         {absen.bukti_foto ? (
                           <a 
-                            href={`http://localhost:5000/uploads/${absen.bukti_foto}`} 
+                            href={`https://absensi-fajar-harapan-production.up.railway.app/uploads/${absen.bukti_foto}`} 
                             target="_blank" 
                             rel="noopener noreferrer"
                             style={{ color: '#2563eb', textDecoration: 'underline', fontWeight: '500' }}

@@ -10,7 +10,7 @@ function Login({ setToken }) {
     e.preventDefault();
     setMessage('');
     
-    const url = 'http://localhost:5000/api/login';
+    const url = 'https://absensi-fajar-harapan-production.up.railway.app/api/login';
     const data = { username, password };
 
     try {

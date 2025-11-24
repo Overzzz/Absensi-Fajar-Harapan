@@ -35,10 +35,10 @@ function RekapBulanan({ token }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resKelas = await axios.get('http://localhost:5000/api/kelas', {headers: {Authorization: `Bearer ${token}`}});
+        const resKelas = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/kelas', {headers: {Authorization: `Bearer ${token}`}});
         setKelasList(resKelas.data);
 
-        const resJadwal = await axios.get('http://localhost:5000/api/jadwal', {headers: {Authorization: `Bearer ${token}`}});
+        const resJadwal = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/jadwal', {headers: {Authorization: `Bearer ${token}`}});
         const uniqueMapels = [...new Set(resJadwal.data.map(item => item.mapel))];
         setMapelList(uniqueMapels.sort());
       } catch (e) {}
@@ -56,7 +56,7 @@ function RekapBulanan({ token }) {
       // [BARU] Ambil guruId untuk filter otomatis
       const guruId = localStorage.getItem('guruId');
 
-      const response = await axios.get('http://localhost:5000/api/absensi', {
+      const response = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/absensi', {
         headers: { Authorization: `Bearer ${token}` },
         params: { 
             bulan: bulanFilter,
