@@ -271,13 +271,29 @@ app.post('/api/login', (req, res) => {
   
   const sql = "SELECT * FROM users WHERE username = ?";
   db.query(sql, [username], (err, results) => {
-    if (err) return res.status(500).send({ message: 'Server error' });
-    if (results.length === 0) return res.status(401).send({ message: 'Username/Password salah!' });
+    // [PERBAIKAN] Tambahkan console.error supaya muncul di Log Railway
+    if (err) {
+        console.error(">>> ERROR SAAT LOGIN (DATABASE):", err); 
+        return res.status(500).send({ message: 'Server error (Cek Log)' });
+    }
+
+    if (results.length === 0) {
+        console.warn(">>> LOGIN GAGAL: Username tidak ditemukan ->", username);
+        return res.status(401).send({ message: 'Username/Password salah!' });
+    }
     
     const user = results[0];
     bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (err) return res.status(500).send({ message: 'Error compare' });
-      if (!isMatch) return res.status(401).send({ message: 'Username/Password salah!' });
+      // [PERBAIKAN] Tambahkan console.error di sini juga
+      if (err) {
+          console.error(">>> ERROR SAAT CEK PASSWORD:", err);
+          return res.status(500).send({ message: 'Error compare' });
+      }
+
+      if (!isMatch) {
+          console.warn(">>> LOGIN GAGAL: Password salah untuk ->", username);
+          return res.status(401).send({ message: 'Username/Password salah!' });
+      }
       
       // [BARU] Jika role guru, cari ID Guru-nya berdasarkan NIP (username)
       if (user.role === 'guru') {
@@ -286,12 +302,14 @@ app.post('/api/login', (req, res) => {
           let guruId = null;
           if (!errGuru && resGuru.length > 0) {
             guruId = resGuru[0].id;
+          } else if (errGuru) {
+             console.error(">>> ERROR CARI ID GURU:", errGuru);
           }
           
           const tokenPayload = { id: user.id, username: user.username, role: user.role, guruId: guruId };
           const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '1h' });
           
-          // Kirim guruId ke frontend
+          
           res.status(200).send({ 
             message: 'Login berhasil!', 
             token, 
