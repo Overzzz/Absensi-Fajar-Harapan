@@ -25,19 +25,21 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// CONNECT MYSQL CLEVER CLOUD
-const db = mysql.createConnection({
+// --- [PERBAIKAN UTAMA DI SINI] ---
+// MENGGUNAKAN POOL AGAR KONEKSI TIDAK PUTUS (TIMEOUT)
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+  port: process.env.DB_PORT,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-db.connect(err => {
-  if (err) console.error('Error DB:', err);
-  else console.log('Connected to remote DB');
-});
+console.log('Database Pool Created & Ready...');
+// ----------------------------------
 
 
 // --- API SISWA ---
