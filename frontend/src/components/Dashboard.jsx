@@ -16,7 +16,7 @@ function Dashboard({ token }) {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/dashboard', {
+        const response = await axios.get('https://impressive-caralie-overzzz-8b9026c7.koyeb.app/api/dashboard', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setStats(response.data);

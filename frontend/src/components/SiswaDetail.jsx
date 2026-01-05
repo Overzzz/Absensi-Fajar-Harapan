@@ -30,13 +30,13 @@ function SiswaDetail({ token }) {
         setLoading(true);
         
         // 1. Ambil Biodata Siswa
-        const resSiswa = await axios.get(`https://absensi-fajar-harapan-production.up.railway.app/api/siswa/${id}`, {
+        const resSiswa = await axios.get(`https://impressive-caralie-overzzz-8b9026c7.koyeb.app/api/siswa/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setSiswa(resSiswa.data);
 
         // 2. Ambil Riwayat Absensi
-        const resRiwayat = await axios.get(`https://absensi-fajar-harapan-production.up.railway.app/api/absensi/siswa/${id}`, {
+        const resRiwayat = await axios.get(`https://impressive-caralie-overzzz-8b9026c7.koyeb.app/api/absensi/siswa/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setRiwayat(resRiwayat.data);
@@ -146,7 +146,7 @@ function SiswaDetail({ token }) {
                 <td style={{ textAlign: 'center' }}>
                   {item.bukti_foto ? (
                     <a 
-                      href={`https://absensi-fajar-harapan-production.up.railway.app/uploads/${item.bukti_foto}`} 
+                      href={`https://impressive-caralie-overzzz-8b9026c7.koyeb.app/uploads/${item.bukti_foto}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       style={{ color: '#2563eb', textDecoration: 'underline', fontSize: '13px' }}

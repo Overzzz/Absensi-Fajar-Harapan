@@ -27,7 +27,7 @@ function AbsenPage({ token }) {
         // [BARU] Ambil guruId dari localStorage (kalau admin null)
         const guruId = localStorage.getItem('guruId'); 
         
-        const response = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/jadwal/aktif', {
+        const response = await axios.get('https://impressive-caralie-overzzz-8b9026c7.koyeb.app/api/jadwal/aktif', {
           headers: { Authorization: `Bearer ${token}` },
           params: { guru_id: guruId } // [BARU] Kirim filter
         });
@@ -57,7 +57,7 @@ function AbsenPage({ token }) {
     const fetchSiswa = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('https://absensi-fajar-harapan-production.up.railway.app/api/siswa', {
+        const response = await axios.get('https://impressive-caralie-overzzz-8b9026c7.koyeb.app/api/siswa', {
           headers: { Authorization: `Bearer ${token}` },
           params: { kelas: jadwalTerpilih.nama_kelas } 
         });
@@ -108,7 +108,7 @@ function AbsenPage({ token }) {
     });
 
     try {
-      const response = await axios.post('https://absensi-fajar-harapan-production.up.railway.app/api/absensi', formData, {
+      const response = await axios.post('https://impressive-caralie-overzzz-8b9026c7.koyeb.app/api/absensi', formData, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'

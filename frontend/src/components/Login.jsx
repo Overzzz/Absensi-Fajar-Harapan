@@ -10,7 +10,7 @@ function Login({ setToken }) {
     e.preventDefault();
     setMessage('');
     
-    const url = 'https://absensi-fajar-harapan-production.up.railway.app/api/login';
+    const url = 'https://impressive-caralie-overzzz-8b9026c7.koyeb.app/api/login';
     const data = { username, password };
 
     try {
