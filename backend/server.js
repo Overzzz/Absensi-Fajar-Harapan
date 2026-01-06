@@ -1,5 +1,5 @@
 const express = require('express');
-const { Pool } = require('pg'); // GANTI DARI MYSQL2 KE PG
+const { Pool } = require('pg');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -25,18 +25,18 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// --- [PERBAIKAN KONEKSI DATABASE (POSTGRESQL)] ---
+// --- KONEKSI DATABASE (POSTGRESQL) ---
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // Pakai satu link panjang lebih aman buat Supabase
+  connectionString: process.env.DATABASE_URL, 
   ssl: {
-    rejectUnauthorized: false // Wajib buat Supabase/Cloud Database
+    rejectUnauthorized: false 
   },
-  max: 10 // connectionLimit
+  max: 10 
 });
 
 console.log('Database Pool Created & Ready (PostgreSQL)...');
 
-// Helper function supaya query lebih rapi dan handle error
+// Helper function query
 const query = (text, params) => pool.query(text, params);
 
 // ----------------------------------
@@ -48,13 +48,13 @@ app.get('/api/siswa', async (req, res) => {
   let sql = "SELECT * FROM siswa";
   const params = [];
   if (kelas) { 
-      sql += " WHERE kelas = $1"; // Ganti ? jadi $1
+      sql += " WHERE kelas = $1"; 
       params.push(kelas); 
   }
   sql += " ORDER BY nama ASC"; 
   
   try {
-      const { rows } = await query(sql, params); // Ambil .rows
+      const { rows } = await query(sql, params); 
       res.json(rows);
   } catch (err) {
       res.status(500).send({ message: 'Error fetching data' });
@@ -65,14 +65,13 @@ app.post('/api/siswa', async (req, res) => {
   const { nama, nis, kelas } = req.body;
   if (!nama || !nis || !kelas) return res.status(400).send({ message: 'Wajib diisi!' });
   
-  // Postgres butuh RETURNING id untuk dapat ID baru
   const sql = "INSERT INTO siswa (nama, nis, kelas) VALUES ($1, $2, $3) RETURNING id";
   
   try {
       const result = await query(sql, [nama, nis, kelas]);
       res.status(201).send({ message: 'Siswa berhasil ditambahkan!', insertedId: result.rows[0].id });
   } catch (err) {
-      if (err.code === '23505') return res.status(400).send({ message: 'NIS terdaftar.' }); // Kode error unik Postgres
+      if (err.code === '23505') return res.status(400).send({ message: 'NIS terdaftar.' }); 
       return res.status(500).send({ message: 'Error saving data' });
   }
 });
@@ -240,7 +239,6 @@ app.post('/api/jadwal', async (req, res) => {
 });
 
 app.get('/api/jadwal', async (req, res) => {
-  // FIELD() tidak ada di Postgres, diganti dengan CASE WHEN
   const sql = `
     SELECT j.*, g.nama as nama_guru, k.nama_kelas 
     FROM jadwal_pelajaran j
@@ -277,15 +275,26 @@ app.delete('/api/jadwal/:id', async (req, res) => {
   }
 });
 
-// Cek Jadwal Aktif
+// --- [DIPERBAIKI] API CEK JADWAL AKTIF (TIMEZONE WIB) ---
 app.get('/api/jadwal/aktif', async (req, res) => {
   const { guru_id } = req.query; 
-  const now = new Date();
-  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-  const hariIni = days[now.getDay()];
   
-  // Format waktu HH:MM:SS manual karena .toTimeString() kadang beda format di server
-  const jamSekarang = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':00';
+  // 1. Ambil waktu sekarang (UTC di server)
+  const now = new Date();
+  
+  // 2. Ubah Jam ke Waktu Jakarta (WIB)
+  // en-GB formatnya HH:MM:SS (24 jam), cocok sama format Database
+  const jamSekarang = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Jakarta' });
+  
+  // 3. Ubah Hari ke Waktu Jakarta
+  // Trik: Convert ke string Jakarta, baru jadikan Date lagi buat ambil getDay()
+  const jakartaDateString = now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
+  const dateInJakarta = new Date(jakartaDateString);
+  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  const hariIni = days[dateInJakarta.getDay()];
+  
+  // Debug Log (biar kelihatan di Koyeb lognya apa)
+  console.log(`>>> CEK JADWAL: Hari=${hariIni}, Jam=${jamSekarang} (WIB)`);
 
   let sql = `
     SELECT j.*, g.nama as nama_guru, k.nama_kelas 
@@ -350,7 +359,7 @@ app.post('/api/login', async (req, res) => {
         id: user.id, 
         username: user.username, 
         role: user.role, 
-        guruId: guruId // Kalau admin null, kalau guru ada isinya
+        guruId: guruId 
       };
       
       const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '1h' });
@@ -378,10 +387,6 @@ app.post('/api/absensi', upload.any(), async (req, res) => {
     const parsedAbsensi = JSON.parse(dataAbsen);
     const files = req.files || []; 
 
-    // Postgres tidak support bulk insert [[val],[val]] seperti MySQL
-    // Kita harus loop insert satu-satu (pakai Promise.all biar cepat)
-    
-    // Siapkan array promise
     const insertPromises = parsedAbsensi.map(absen => {
       const fileBukti = files.find(f => f.fieldname === `bukti_${absen.siswa_id}`);
       const foto = fileBukti ? fileBukti.filename : null;
@@ -419,14 +424,14 @@ app.get('/api/absensi', async (req, res) => {
     `;
     const params = [];
     let conditions = [];
-    let counter = 1; // Counter untuk $1, $2, dst
+    let counter = 1; 
 
     if (tanggal) { 
         conditions.push(`absensi.tanggal = $${counter++}`); 
         params.push(tanggal); 
     } 
     else if (bulan) { 
-        conditions.push(`absensi.tanggal::text LIKE $${counter++}`); // Casting ::text untuk LIKE
+        conditions.push(`absensi.tanggal::text LIKE $${counter++}`); 
         params.push(bulan + '-%'); 
     }
     if (kelas) { 
@@ -473,7 +478,6 @@ app.get('/api/absensi/siswa/:id', async (req, res) => {
 });
 
 app.get('/api/dashboard', async (req, res) => {
-  // Query count tidak berubah banyak, tapi return .rows[0]
   const sql = `
     SELECT 
       (SELECT COUNT(*) FROM siswa) AS "totalSiswa",
@@ -486,7 +490,6 @@ app.get('/api/dashboard', async (req, res) => {
   `;
   try {
       const { rows } = await query(sql);
-      // Konversi string count ke number (karena Postgres count return string/bigint)
       const data = rows[0];
       const result = {
         totalSiswa: parseInt(data.totalSiswa),
@@ -505,5 +508,5 @@ app.get('/api/dashboard', async (req, res) => {
 });
 
 app.listen(port, '0.0.0.0', () => {
-  console.log(`>>> KODINGAN BARU POSTGRESQL SIAP! Server listen on ${port}`);
+  console.log(`>>> KODINGAN BARU POSTGRESQL + TIMEZONE WIB SIAP! Server listen on ${port}`);
 });
